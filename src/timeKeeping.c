@@ -15,78 +15,56 @@
 
 void timeHourCheck(void)
 {
-	 //9 rolls over to 0
-	 if(( ClockTime.Hours & 0x0F) >= 0xA)
+	 //incrementing 23 --> 24, rolls over to 0, set am
+	 if(ClockTime.Hours >= 24)
 	 {
-			 ClockTime.Hours = ( ClockTime.Hours & 0x30 ) + 0x10;
+			 ClockTime.Hours = ClockTime.Hours % 24;
+			 ClockTime.TimeFormat = RTC_HOURFORMAT12_AM;
 
 	 }
 
-	 //if incrementing passes 12 -> toggles am/pm
-	 if( ClockTime.Hours == 0x12 )
+	 //incrementing passes 12 -> toggles am/pm
+	 if( ClockTime.Hours == 12)
 	 {
-			 ClockTime.TimeFormat ^= RTC_HOURFORMAT12_PM;
+			 ClockTime.TimeFormat = RTC_HOURFORMAT12_PM;
 	 }
 
-//if incrementing hits hour 13, sets to 1 oclock
-	 if( ClockTime.Hours >= 0x13 )
-	 {
-			 ClockTime.Hours = 0x01;
-	 }
 
 }
 
 void timeMinuteCheck(void)
 {
         //allows 9 to roll over to 0 and 60 to 0
-         if(( ClockTime.Minutes & 0x0F) >= 0xA)
+         if(ClockTime.Minutes >= 60)
          {
-                 ClockTime.Minutes = ( ClockTime.Minutes & 0x70 ) + 0x10;
-                 if(( ClockTime.Minutes & 0x70 ) >= 0x60 )
-                 {
-                         ClockTime.Minutes = 0x00;
-                 }
+                 ClockTime.Minutes = ClockTime.Minutes % 60;
          }
 }
 
 void alarmHourCheck(void)
 {
-//
-// 9 rolls over to 0
-//
-	 if(( ClockAlarm.AlarmTime.Hours & 0x0F) >= 0xA)
+	 //incrementing 23 --> 24, rolls over to 0, set am
+	 if(ClockAlarm.AlarmTime.Hours >= 24)
 	 {
-			 ClockAlarm.AlarmTime.Hours = (ClockAlarm.AlarmTime.Hours & 0x30 ) + 0x10;
+		 ClockAlarm.AlarmTime.Hours = ClockAlarm.AlarmTime.Hours % 24;
+		 ClockAlarm.AlarmTime.TimeFormat = RTC_HOURFORMAT12_AM;
 
 	 }
-//
-// if incrementing passes 12 -> toggles am/pm
-//
-	 if( ClockAlarm.AlarmTime.Hours == 0x12 )
-	 {
-			 ClockAlarm.AlarmTime.TimeFormat ^= RTC_HOURFORMAT12_PM;
-	 }
 
-//
-// if incrementing hits hour 13, sets to 1 oclock
-//
-	 if( ClockAlarm.AlarmTime.Hours >= 0x13 )
+	 //incrementing passes 12 -> toggles am/pm
+	 if( ClockAlarm.AlarmTime.Hours == 12)
 	 {
-			  ClockAlarm.AlarmTime.Hours = 0x01;
+		 ClockAlarm.AlarmTime.TimeFormat = RTC_HOURFORMAT12_PM;
 	 }
 
 }
 
 void alarmMinuteCheck(void)
 {
-         //allows 9 to roll over to 0 and 60 to 0
-         if(( ClockAlarm.AlarmTime.Minutes & 0x0F) >= 0xA)
-         {
-                 ClockAlarm.AlarmTime.Minutes = ( ClockAlarm.AlarmTime.Minutes & 0x70 ) + 0x10;
-                 if(( ClockAlarm.AlarmTime.Minutes & 0x70 ) >= 0x60 )
-                 {
-                         ClockAlarm.AlarmTime.Minutes = 0x00;
-                 }
-         }
+	//allows 60 to roll over to 0 a
+	 if(ClockAlarm.AlarmTime.Minutes >= 60)
+	 {
+			 ClockAlarm.AlarmTime.Minutes = ClockAlarm.AlarmTime.Minutes % 60;
+	 }
 }
 
